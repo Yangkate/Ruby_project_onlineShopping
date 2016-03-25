@@ -1,0 +1,40 @@
+<script type="application/javascript">
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    })
+</script>
+
+<div class="container">
+  <div class="page-header">
+    <h1>Promotions</h1>
+  </div>
+  <br>
+
+  <div class="row ">
+    <% if @promotions.count == 0 %>
+        <p><i>No data</i></p>
+
+    <% else %>
+    <% @promotions.each do |promotion| %>
+        <div class="col-sm-6 col-md-4">
+          <div class="thumbnail">
+            <%= image_tag promotion.image.url(:list, timestamp: false), :class => "img-rounded" %>
+            <div class="caption">
+              <h3><%= promotion.title %></h3>
+              <p>Period: <%= promotion.start_date %> - <%= promotion.end_date %></p>
+              <p>Shopping mall: <%= link_to ShoppingMall.find(Store.find(promotion.Store_id).ShoppingMall_id).shopping_mall_name, shopping_mall_path(Store.find(promotion.Store_id).ShoppingMall_id) %></p>
+              <p>
+                <%= link_to 'Detail', promotion_path(promotion.id), :class => "btn btn-info btn-sm" %>
+                <% if promotion.discount_code == "" %>
+                    <button tabindex="0" type="button" class="btn btn-primary btn-sm" data-placement="bottom" data-trigger="focus" data-toggle="popover" title="Discount code" data-content="No discount code">Get discount code</button>
+                <% else %>
+                    <button tabindex="0" type="button" class="btn btn-primary btn-sm" data-placement="bottom" data-trigger="focus" data-toggle="popover" title="Discount code" data-content="<%= promotion.discount_code %>">Get discount code</button>
+                <% end %>
+               </p>
+            </div>
+          </div>
+        </div>
+    <% end %>
+    <% end %>
+  </div>
+</div>

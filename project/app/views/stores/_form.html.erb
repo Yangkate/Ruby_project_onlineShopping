@@ -1,0 +1,66 @@
+<script type="text/javascript">
+
+    $("#myform").validate({
+        rules: {
+            field: {
+                required: true,
+                accept: "xls|csv"
+            }
+        }
+    });
+</script>
+
+
+<%= form_for(@store, html: {class: "form-horizontal"}) do |f| %>
+  <% if @store.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@store.errors.count, "error") %> prohibited this store from being saved:</h2>
+
+      <ul>
+      <% @store.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+    <%= hidden_field_tag 'shopping_mall_id' , @shopping_mall_id %>
+
+    <div class="form-group">
+      <div class="col-lg-2"><%= f.label :store_name %></div>
+      <div class="col-lg-5"><%= f.text_field :store_name, :class => "form-control", :required => true %></div>
+    </div>
+    <div class="form-group">
+      <div class="col-lg-2"><%= f.label :location %></div>
+      <div class="col-lg-5"><%= f.text_field :location, :class => "form-control", :required => true %></div>
+    </div>
+    <div class="form-group">
+      <div class="col-lg-2"><%= f.label :store_contact_phone %></div>
+      <div class="col-lg-5"><%= f.number_field :store_contact_phone, :class => "form-control" %></div>
+    </div>
+    <div class="form-group">
+      <div class="col-lg-2"><%= f.label :store_email %></div>
+      <div class="col-lg-5"><%= f.email_field :store_email, :class => "form-control" %></div>
+    </div>
+    <div class="form-group">
+      <div class="col-lg-2"><%= f.label :description %></div>
+      <div class="col-lg-5"><%= f.text_area :description, :class => "form-control" %></div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-lg-2"><%= f.label :StoreCategory_id %></div>
+      <div class="col-lg-5"><%= f.collection_select(:StoreCategory_id, StoreCategory.all, :id, :category_name , :class => "form-control") %></div>
+    </div>
+    <div class="form-group">
+      <div class="col-lg-2"><%= f.label :image %> <span style="color: red;">(Required)</span></div>
+      <div class="col-lg-5"><%= f.file_field :image %></div>
+    </div>
+    <br>
+    <div class="form-group">
+      <div class="col-lg-3"></div>
+      <div class="col-lg-9 text-right">
+        <%= f.submit "Submit", :class => "btn btn-primary" %> &nbsp;&nbsp;
+        <%= link_to 'Back', stores_path(:shopping_mall_id => @shopping_mall_id), :class => "btn btn-default" %>
+      </div>
+    </div>
+<% end %>

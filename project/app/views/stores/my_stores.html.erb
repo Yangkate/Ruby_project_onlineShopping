@@ -1,0 +1,37 @@
+<h1>Listing stores</h1>
+
+<table>
+  <thead>
+  <tr>
+    <th>Logo</th>
+    <th>Store name</th>
+    <th>Store contact phone</th>
+    <th>Store email</th>
+    <th>Description</th>
+    <th>Shoppingmall</th>
+    <th>Storecategory</th>
+    <th colspan="3"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @stores.each do |store| %>
+      <tr>
+        <td><%= image_tag store.image.url(:thumb, timestamp: false) %></td>
+        <td><%= store.store_name %></td>
+        <td><%= store.store_contact_phone %></td>
+        <td><%= store.store_email %></td>
+        <td><%= store.description %></td>
+        <td><%= store.ShoppingMall %></td>
+        <td><%= store.StoreCategory %></td>
+        <td><%= link_to 'Show', store %></td>
+        <td><%= link_to 'Edit', edit_store_path(store) %></td>
+        <td><%= link_to 'Destroy', store, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Store', new_store_path(:shopping_mall_id => ShoppingMall.find_by_User_id(current_user.id).id) %>

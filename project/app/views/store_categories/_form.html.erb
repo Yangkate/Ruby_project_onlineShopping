@@ -1,0 +1,27 @@
+<%= form_for(@store_category, html: {class: "form-horizontal"}) do |f| %>
+  <% if @store_category.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@store_category.errors.count, "error") %> prohibited this store_category from being saved:</h2>
+
+      <ul>
+      <% @store_category.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+    <div class="form-group">
+      <div class="col-lg-2"><%= f.label :category_name %></div>
+      <div class="col-lg-5"><%= f.text_field :category_name, :class => "form-control", :required => true %></div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-lg-3"></div>
+      <div class="col-lg-9 text-right">
+        <%= f.submit "Submit", :class => "btn btn-primary" %> &nbsp;&nbsp;
+        <%= link_to 'Back', store_categories_path, :class => "btn btn-default" %>
+      </div>
+    </div>
+
+<% end %>

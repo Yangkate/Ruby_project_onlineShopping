@@ -1,0 +1,61 @@
+
+
+<div class="container">
+  <div class="page-header">
+
+    <h1><%= ShoppingMall.find(@shopping_mall_id).shopping_mall_name %></h1>
+
+  </div>
+  <br>
+
+
+  <div class="row">
+    <table class="table table-striped table-hover">
+      <thead>
+      <tr>
+        <th>Logo</th>
+        <th>Store name</th>
+        <th>Store contact phone</th>
+        <th>Store email</th>
+        <th>Description</th>
+        <th>Storecategory</th>
+        <th colspan="3"></th>
+      </tr>
+      </thead>
+
+
+  <tbody>
+    <% if @stores.count == 0%>
+      <tr>
+        <td colspan="9"><i>No data</i></td>
+      </tr>
+    <% end %>
+    <% @stores.each do |store| %>
+      <tr>
+        <td><%= image_tag store.image.url(:thumb, timestamp: false) %></td>
+        <td><%= store.store_name %></td>
+        <td><%= store.store_contact_phone %></td>
+        <td><%= store.store_email %></td>
+        <td><%= store.description %></td>
+        <td><%= StoreCategory.find(store.StoreCategory).category_name %></td>
+
+        <td><%= link_to 'Edit', edit_store_path(store) %></td>
+        <td><%= link_to 'Promotion', promotion_of_store_path(:store_id => store.id) %></td>
+        <td><%= link_to 'Destroy', store, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+    <br>
+    <% if user_signed_in?  %>
+        <% if current_user.Role_id == 2  %>
+        <div class="col-lg-12 text-right">
+          <%= link_to 'New store', new_store_path(:shopping_mall_id => ShoppingMall.find_by_User_id(current_user.id).id), :class => "btn btn-default" %>
+        </div>
+    <% end %>
+    <% end %>
+  </div>
+</div>
+
+

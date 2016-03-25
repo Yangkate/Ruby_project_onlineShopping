@@ -1,0 +1,16 @@
+<div class="container">
+    <div class="page-header">
+      <h1>Reviews</h1>
+    </div>
+    <div id="review" class="well well-small">
+      <% if @reviews.count == 0 %>
+          <p style="font-style: italic">No comment yet.</p>
+      <%else%>
+          <% @reviews.each do |review| %>
+              <p><%= review.comment %> </p>
+              <p><small>By <%= User.find(review.User_id).first_name %> <%= User.find(review.User_id).last_name %> Posted <%= time_ago_in_words(review.created_at) %> ago</small></p>
+              <hr>
+          <% end %>
+      <% end %>
+    </div>
+</div>

@@ -1,0 +1,8 @@
+<%= div_for review do %>
+    <% @shopping_mall_id = review.ShoppingMall_id %>
+    <p><%= review.comment %> </p>
+    <p><small>By <%= User.find(review.User_id).first_name %> <%= User.find(review.User_id).last_name %> Posted <%= time_ago_in_words(review.created_at) %> ago</small></p>
+    <hr>
+<% end %>
+
+

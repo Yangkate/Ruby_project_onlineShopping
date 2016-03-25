@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="page-header">
+    <h1>Shopping malls</h1>
+  </div>
+  <br>
+
+  <div class="row">
+    <table class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th>Shopping mall name</th>
+          <th>Phone number</th>
+          <th>Address</th>
+          <th>Certification</th>
+          <th>City</th>
+          <th>Country</th>
+          <th colspan="3"></th>
+        </tr>
+      </thead>
+
+  <tbody>
+    <% @shopping_malls.each do |shopping_mall| %>
+      <tr>
+        <td><%= shopping_mall.shopping_mall_name %></td>
+        <td><%= shopping_mall.phone_number %></td>
+        <td><%= shopping_mall.address %></td>
+        <td><%= City.find(shopping_mall.City).city_name %></td>
+        <td><%= Country.find(shopping_mall.Country).country_name %></td>
+        <td><%= link_to 'Show', shopping_mall %></td>
+        <% if current_user.Role_id == 2 %>
+            <td><%= link_to 'Edit', edit_shopping_mall_path(shopping_mall) %></td>
+        <% end %>
+        <td><%= link_to 'Destroy', shopping_mall, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+</div>
+</div>

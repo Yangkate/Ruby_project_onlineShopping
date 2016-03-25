@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <link href="ejb-tutorial_files/application-731ec5afcce647d140c7d8802eea9ea5.css" media="all" rel="stylesheet" type="text/css">
+  <script src="ejb-tutorial_files/application-ce28407ff196db8461d91eb85d6d6e98.js" type="text/javascript"></script>
+  <meta content="authenticity_token" name="csrf-param">
+<meta content="v0I6kktXHNtGoJpIUJ1zHePdekkbAgTxkznJMojYJwA=" name="csrf-token">
+  <link rel="icon" href="https://cis.ait.asia/assets/aiticon-217e6a357f682ae558ddb1f9df794a6d.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="https://cis.ait.asia/assets/aiticon-217e6a357f682ae558ddb1f9df794a6d.ico" type="image/x-icon">
+  <style type="text/css">
+    #contentwrapper {
+      background: #ffffff url("/assets/bgcol-fabcba7b38bf806602075812c44c88e5.png") repeat-y 0 0;
+    }
+    #lcol li.selected {
+      list-style-image: url("/assets/arrow-4b23d87895eb4dcb6a6b530593b3fc09.gif");
+    }
+    * { -moz-box-sizing: inherit; }
+    body { width: 880px; }
+  </style>
+</head>
+<body>
+
+<div id="hdr">
+  <div id="hdrimg">
+    <a href="http://www.ait.asia/">
+      <img src="ejb-tutorial_files/institute-logo-c7dda1e98e68f428863ada8a988f1037.png" alt="Asian Institute of Technology logo">
+    </a>
+  </div>
+  <div>
+    <h1><a href="http://cis.ait.asia/">Course Information System</a></h1>
+    <h2><a href="http://www.ait.asia/">Asian Institute of Technology</a></h2>
+  </div>
+</div>
+
+<div id="bar"></div>
+
+<div id="contentwrapper">
+  <div id="lcol">
+    <ul><li id="home"><a href="https://cis.ait.asia/course_offerings/288">Home</a></li><li id="lectures"><a href="https://cis.ait.asia/course_offerings/288/lectures">Schedule</a></li><li id="lecture_notes"><a href="https://cis.ait.asia/course_offerings/288/lecture_notes">Lecture notes</a></li><li id="handouts"><a href="https://cis.ait.asia/course_offerings/288/handouts">Handouts</a></li><li id="assignments"><a href="https://cis.ait.asia/course_offerings/288/assignments">Assignments</a></li><li id="exams"><a href="https://cis.ait.asia/course_offerings/288/exams">Exams</a></li><li id="readings"><a href="https://cis.ait.asia/course_offerings/288/readings">Readings</a></li><li id="resources"><a href="https://cis.ait.asia/course_offerings/288/resources">Resources</a></li><li class="selected simple-navigation-active-leaf" id="ejb-tutorial"><a href="https://cis.ait.asia/course_offerings/288/ejb-tutorial" class="selected">EJB tutorial</a></li><li id="jpql-tutorial"><a href="https://cis.ait.asia/course_offerings/288/jpql-tutorial">JPQL tutorial</a></li><li id="spring-tutorial"><a href="https://cis.ait.asia/course_offerings/288/spring-tutorial">Spring tutorial</a></li><li id="jms-tutorial"><a href="https://cis.ait.asia/course_offerings/288/jms-tutorial">JMS tutorial</a></li><li id="servicemix-camel-tutorial-1"><a href="https://cis.ait.asia/course_offerings/288/servicemix-camel-tutorial-1">ServiceMix/Camel tutorial 1</a></li><li id="servicemix-camel-tutorial-2"><a href="https://cis.ait.asia/course_offerings/288/servicemix-camel-tutorial-2">ServiceMix/Camel tutorial 2</a></li><li id="servicemix-cxf-tutorial"><a href="https://cis.ait.asia/course_offerings/288/servicemix-cxf-tutorial">ServiceMix/CXF tutorial</a></li><li id="activiti-tutorial"><a href="https://cis.ait.asia/course_offerings/288/activiti-tutorial">Activiti tutorial</a></li><li id="activiti-servicemix-camel-tutorial-1"><a href="https://cis.ait.asia/course_offerings/288/activiti-servicemix-camel-tutorial-1">Activiti/ServiceMix/Camel tutorial 1</a></li><li id="activiti-servicemix-camel-tutorial-2"><a href="https://cis.ait.asia/course_offerings/288/activiti-servicemix-camel-tutorial-2">Activiti/ServiceMix/Camel tutorial 2</a></li><li class="courselist" id="course_catalog"><a href="https://cis.ait.asia/course_catalog_entries">Course catalog</a></li><li class="courselist" id="course_offerings"><a href="https://cis.ait.asia/course_offerings">Course offerings</a></li><li class="user" id="login"><a href="https://cis.ait.asia/users/sign_in">Login</a></li></ul>
+  </div>
+  
+  <div id="content">
+      <h1>AT70.18: Software Architecture Design, January 2015</h1>
+    <h2>EJB Tutorial: Geronimo+Eclipse+EJB+Derby+JPA</h2>
+
+<p>This document describes how to do EJB development with Geronimo as 
+the target application server. We'll use Eclipse for the IDE, Derby for 
+the RDMBS, and JPA for the ORM. Geronimo uses OpenEJB as the EJB 
+container. The code is inspired by the ActionBazaar example application 
+developed in Panda et al. (2013), <i>EJB3 in Action</i>, 2nd edition, from Manning. The Geronimo-specific stuff mostly comes from the tutorials in the <a href="http://cwiki.apache.org/">Geronimo wiki</a>. The instructions are for Ubuntu 14.04, but should be mostly applicable to other Linuxes or even Windows.</p>
+
+<h3>Java SDK installation</h3>
+
+<p>Make sure you have Oracle's JDK 1.6 or 1.7 installed. Previously, the
+ version of OpenJPA that ships with Geronimo 3.0 did not yet fully 
+support Java 1.7, but it may by the time you read this. You can find out
+ what version you're running with the command</p>
+
+<pre><code>update-alternatives --display java
+</code></pre>
+
+<p>You should see something like:</p>
+
+<pre><code>link currently points to /usr/lib/jvm/java-7-oracle/jre/bin/java
+</code></pre>
+
+<p>in the output. OpenJDK is not recommended.  If you don't have Oracle Java
+installed, get it installed using <a href="http://www.webupd8.org/2012/01/install-oracle-java-jdk-7-in-ubuntu-via.html">webupd8.org's instructions</a> (with those instructions, if you want Java 6, use <tt>apt-get install oracle-java6-installer</tt> to install Java 6 rather than 7).</p>
+
+<p>If you have Oracle Java on your system but it's not selected as the default JDK, you can run</p>
+
+<pre><code>update-alternatives --config java
+</code></pre>
+
+<p>and select the Oracle JDK/JRE as your default Java environment.</p>
+
+<h3>Eclipse installation</h3>
+
+<p>Install Eclipse for Java Enterprise developers on top of Oracle
+JDK. Download the tarball from the <a href="http://www.eclipse.org/downloads">Eclipse downloads site</a>
+then, from your home directory, run:</p>
+
+<pre><code>tar xvzf Downloads/eclipse-jee-luna-SR1a-linux-gtk-x86_64.tar.gz
+mv eclipse eclipse-jee
+</code></pre>
+
+<p>You can create a launcher on the toolbar or desktop if you like. If
+you have some strange display problems with Linux under the Gnome
+desktop, you can change your launcher execution to the following
+(replace my login name with yours as appropriate, of course):</p>
+
+<pre><code>bash -c "export GDK_NATIVE_WINDOWS=1 ; /home/mdailey/eclipse-jee/eclipse"
+</code></pre>
+
+<h3>Geronimo installation</h3>
+
+<p>Download the latest production version of Geronimo (currently 3.0.1) from the <a href="http://geronimo.apache.org/downloads.html">Geronimo downloads site</a>.
+  You want the "Full" version, not the Web Profile version, which does 
+not contain all of Java EE. From your home directory, unpack the server 
+distribution:</p>
+
+<pre><code>tar xvzf Downloads/geronimo-tomcat7-javaee6-3.0.1-bin.tar.gz
+</code></pre>
+
+<p>When you get your command prompt back, try starting the server:</p>
+
+<pre><code>cd geronimo-tomcat7-javaee6-3.0.1/bin
+./geronimo run
+</code></pre>
+
+<p>This will run Geronimo in the foreground with an administrative console.</p>
+
+<p>Go to <a href="http://localhost:8080/console">http://localhost:8080/console</a>
+to check that the admin console Web application is running. Log in with username <tt>system</tt> and password <tt>manager</tt>.</p>
+
+<p>Stop Geronimo by pressing &lt;ctrl&gt;-d.</p>
+
+<p>You can also run in the background using</p>
+
+<pre><code>./startup
+</code></pre>
+
+<p>and kill the server with</p>
+
+<pre><code>./shutdown
+</code></pre>
+
+<p>you will have to enter the admin username <tt>system</tt> and password <tt>manager</tt> to shut down.</p>
+
+<p><b>Important:</b> if, on startup, Geronimo gives an exception with explanation <tt>Unable to decrypt</tt> or similar, you need to set the <tt>JAVA_HOME</tt>
+ environment variable when starting Geronimo.  Unfortunately, it seems 
+that if you get this wrong the first time you try to start Geronimo, <b>your Geronimo installation may be corrupted and no amount of playing with <tt>JAVA_HOME</tt> seems to work.</b> If this happens, try reinstalling before running with the correct <tt>JAVA_HOME</tt> setting:</p>
+
+<pre><code>JAVA_HOME=/usr/lib/jvm/java-7-oracle bin/geronimo run
+</code></pre>
+
+<p>Rather than typing the path every time you start Geronimo, you can 
+also edit ~/geronimo-tomcat7-javaee6-3.0.1/bin/geronimo and add the line</p>
+
+<pre><code>JAVA_HOME=/usr/lib/jvm/java-7-oracle
+</code></pre>
+
+<p>near the beginning of the script (replace java-7-oracle with your version, of course).</p>
+
+<h3>Geronimo Eclipse server adapter installation</h3>
+
+<p>The default Geronimo Eclipse update site is at <tt>apache.org</tt> and is extremely slow from Thailand.  We'll install the Geronimo Eclipse tools using a Thailand mirror of <tt>apache.org</tt>.</p>
+
+<p>Start Eclipse, then go to Help -&gt; Install New Software.  Click on 
+"Add" to create a new Eclipse updates repository.  Use something like 
+"Geronimo Eclipse update site" as the name and <a href="http://mirror.issp.co.th/apache/geronimo/eclipse/updates/">http://mirror.issp.co.th/apache/geronimo/eclipse/updates/</a> as the URL.</p>
+
+<p>Once the update site is queried, find the "Geronimo 3.0" adapter and 
+install.  Accept the license and the Geronimo certificate.  Allow 
+Eclipse to restart itself.  Now you should have the Geronimo tools 
+installed.</p>
+
+<p>To set up Eclipse to start/stop your Geronimo server: In the Java EE
+perspective, go to the Servers tab, right click and select “New -&gt;
+Server,” select “Apache -&gt; Geronimo 3.0.” Make sure Oracle Java 1.7 
+is selected as the JRE, and browse to your Geronimo server installation
+directory for the “Application Server Installation Directory.”
+Ignore the selection the source code archive, and accept the defaults
+for the rest of the panels. You should be able to start and stop the
+server by right clicking in the servers view.</p>
+
+<p>OK, great! Now you can monitor your Geronimo server from within
+Eclipse and automatically republish the application you're working on to the
+server as you're developing.</p>
+
+<p>Occasionally you may have problems when GEP tries to republish your
+modified EAR applications to Geronimo. If so, you might try deleting
+and recreating the server definition in Eclipse. This helped me once.</p>
+
+<h3>Hello world JSP application</h3>
+
+<p>Now it's time to try deploying something to our new server. We'll begin
+with a simple JSP based Web application.</p>
+
+<p>In Eclipse, select "New -&gt; Dynamic Web Project." You can call it
+hello-world-jsp or whatever you like. Use Geronimo 3.0 as the target
+runtime, Web module version 3.0, and use defaults for the remaining
+fields.</p>
+
+<p>Under the WebContent directory, create a JSP called index.jsp with
+contents as follows:</p>
+
+<pre><code>&lt;html&gt;
+  &lt;head&gt;
+    &lt;jsp:useBean id="datetime" class="java.util.Date"/&gt;
+    &lt;title&gt;
+      Basic HelloWorld JSP
+    &lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body bgcolor="#1276C2"&gt;
+    &lt;h1&gt;
+      &lt;font face="tahoma" color="white"&gt;
+        Hello world from GERONIMO!
+      &lt;/font&gt;
+    &lt;/h1&gt;
+    &lt;font face="tahoma" color="white"&gt;on ${datetime}&lt;/font&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>Take note of the Geronimo-specific deployment descriptor,
+<tt>geronimo-web.xml</tt>, which specifies the parameters for the Geromino
+Configuration Archive (CAR) file.  If you asked the tool to generate it, you'll also have the standard <tt>web.xml</tt> deployment
+descriptor, which specifies welcome files and your servlets (which
+don't yet exist).</p>
+
+<p>To run your new application on the server, go to the Geronimo server 
+entry in your Servers view, right click, select "Add and Remove," then 
+select your Web application.  Once it is deployed, go to <a href="http://localhost:8080/hello-world-jsp">http://localhost:8080/hello-world-jsp</a> in the browser. The URI path is specified in the <tt>web:context-root</tt> element of the <tt>geronimo-web.xml</tt> file, for example:</p>
+
+<pre><code>&lt;web:context-root&gt;/hello-world-jsp&lt;/web:context-root&gt;
+</code></pre>
+
+<p>If all is successful, you'll get a hello
+world message from your application.</p>
+
+<h3>Create an embedded Derby database</h3>
+
+<p>Next we'll see how to create a database within the embedded Derby
+SQL server that ships with Geronimo.</p>
+
+<p>Go to the Geronimo Web console, and in the "Quick Launch" menu at the top left, select "DB Manager." The DB Viewer
+portlet shows you the available databases, and the "Run SQL" portlet
+lets you create databases and send SQL to your database.</p>
+
+<p>For this tutorial, use the Run SQL portlet to create a database
+called "BazaarDB". You can use SQL to create tables and the DB Viewer to browse
+your schema.</p>
+
+<p>You can <a href="http://db.apache.org/derby">read more about Derby here</a>.</p>
+
+<h3>Create JDBC connection pools for your Java EE apps to talk to Derby</h3>
+
+<p>The main way to connect to a database in Java EE is through the
+Datasource interface, which encapsulates a connection pool maintained
+by the application server that is accessible via JNDI.</p>
+
+<p>When we're using JPA from an EJB in Geronimo, most of the work will
+be done through a "JTA Datasource" that supports the Java Transaction
+API. However, some work, such as allocating auto-generated keys, needs
+to be done outside of a transaction, so JPA also wants a "non-JTA
+Datasource" (connection pool) for the same database. First, create the
+JTA datasource:</p>
+
+<ol>
+<li>Go to <a href="http://localhost:4848/asadmin">http://localhost:8080/console</a></li>
+<li>Under "Services -&gt; Database Pools" select the database pool
+wizard.</li>
+<li>Use the name <tt>BazaarDS</tt>, database type "Derby embedded", and
+database name <tt>BazaarDB</tt>.</li>
+<li>Use username <tt>dbadmin</tt> and password <tt>manager</tt>.</li>
+<li>Use the defaults for the remaining fields.</li>
+<li>Make sure you can talk to the database through the new connection
+pool (try creating a table, for example, then checking that the table exists from the DB manager).</li>
+</ol>
+
+
+<p><b>Important if you want to autogenerate
+key fields</b>: create another pool named NoTxBazaarDS for
+the same database with the Transaction Type set to none.</p>
+
+<p>You can also connect to an existing database outside of Geronimo by
+selecting the right database type, e.g., PostgreSQL Local for a local
+PostgreSQL database.&nbsp; The wizard will automatically download and
+install the PostgreSQL driver for you.</p>
+
+<h3>Set up Eclipse to communicate with your database</h3>
+
+<p>If you want to see your database from within Eclipse, you can do the
+following:</p>
+
+<ol>
+<li>Right click on “Databases” in the “Data Source Explorer” view and
+select New.</li>
+<li>Select the "Derby" connection profile.</li>
+<li>Click on the * button next to the "Drivers" drop down and select
+the "Derby Client JDBC Driver."</li>
+<li>Under the Name/Type tab, use a name such as "Derby JDBC Driver"</li>
+<li>Under the "JAR List" tab, click "Add JAR/Zip" and navigate to <tt>/usr/lib/jvm/jdk1.7.0/db/lib/derbyclient.jar</tt></li>
+<li>Under the "Properties" tab, set the connection template up:
+
+<ol>
+<li>Database: BazaarDB</li>
+<li>Host: localhost</li>
+<li>Port number: 1527</li>
+<li>User name: dbadmin</li>
+<li>Password: manager</li>
+<li>Turn off "Create Database."</li>
+<li>Click on "Test Connection" and ensure that you get a "Ping
+succeeded!" message.</li>
+</ol>
+</li>
+</ol>
+
+
+<p>You should now be able to connect to the database in Eclipse and
+browse the schema.</p>
+
+<h3>Create an Enterprise Application Project</h3>
+
+<p>Next we use Eclipse to create an "Enterprise Application Project" (a
+wrapper project for one or more separate Java EE module projects) and
+set up deployment to Geronimo.</p>
+
+<p>In Eclipse, go to "New -&gt; Enterprise Application Project," and
+use the name BazaarEAR with Target Runtime Apache Geronimo 3.0, EAR
+Version 6.0, and the default configuration.</p>
+
+<p>Make sure on the next panel that "Generate application.xml
+deployment descriptor" is selected.</p>
+
+<p>In the next panel (the deployment plan), use group ID bazaarear,
+artifact ID bazaarear. Leave the version and artifact type alone.
+Then you're finished.</p>
+
+<p>You will initially get an error in the EAR application.xml
+deployment descriptor because you don't have any Java EE modules to
+deploy in the EAR yet.</p>
+
+<h3>Create an EJB Project</h3>
+
+<p>Now we have to create a separate project to hold our EJBs. Go to "New
+ -&gt; EJB Project," use the name bazaarEJB, Apache Geronimo 3.0 
+runtime, and select to add this project to our bazaarEAR project.</p>
+
+<p>Allow the new EJB wizard to create the EJB Client JAR definition with default settings.</p>
+
+<p>For the Geronimo deployment plan, use the same group id ("bazaarear")
+ as before, with the new artifact id "bazaarejb." Use defaults for 
+version and deployment type.  Click "Finish."</p>
+
+<p>This should fix the error you originally got in the EAR application.xml deployment descriptor.</p>
+
+<h3>Create a Web Application Project as a module in the EAR</h3>
+
+<p>Now let's make a Web application client.&nbsp; Go to "New -&gt; 
+Dynamic Web Project," use the name bazaarWAR, Apache Geronimo 3.0 
+runtime, Add the project to your EAR.  Be sure to select the option 
+"Generate web.xml deployment descriptor." In the deployment plan use 
+group ID "bazaarear" and artifact id "bazaarwar." Click "Finish."</p>
+
+<p>You should probably edit <tt>geronimo-web.xml</tt> to deploy the Web app to a more friendly URI:</p>
+
+<pre><code>&lt;web:context-root&gt;/bazaar&lt;/web:context-root&gt;
+</code></pre>
+
+<h3>Hello World with a stateless session bean</h3>
+
+<p>First let's try another Hello World type application in which a 
+servlet invokes a service provided by a stateless session bean running 
+in the EJB container.</p>
+
+<p>In the EJB project, select "New -&gt; EJB 3.X Session Bean."  Use package name <tt>com.bazaar.accounts</tt>, class name <tt>AccountManager</tt> and under "Create business interface," specify the "Remote" interface with default name. Use defaults otherwise.</p>
+
+<p>You should now have the definition of the bean class in your EJB 
+project and the remote interface definition in the EJB Client project.</p>
+
+<p>The autogenerated remote interface is annotated with the <tt>@Remote</tt>
+ annotation to specify that this is the interface clients outside the 
+EJB container should use to access the session bean.  Modify the remote 
+interface to add a simple "hello" method:</p>
+
+<pre><code>@Remote
+public interface AccountManagerRemote
+{
+   public String sayHello(String name);
+}
+</code></pre>
+
+<p>The autogenerated bean class is annotated with the <tt>@Stateless</tt> and <tt>@LocalBean</tt>
+ annotations.  This will tell the EJB container that the session bean 
+server side is stateless (sharable) and that the session bean can also 
+be accessed locally using the same API.  Add the <tt>sayHello()</tt> implementation to the bean class:</p>
+
+<pre><code>@Stateless
+@LocalBean
+public class AccountManager implements AccountManagerRemote
+{
+   public String sayHello(String name)
+   {
+      return getClass().getName() + " says hello to " + name + ".";
+   }
+}
+</code></pre>
+
+<p>OK, so far not so bad, right? Now let's add a JSP <tt>index.jsp</tt> to the Web
+application with contents</p>
+
+<pre><code>&lt;%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%&gt;
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd"&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"&gt;
+    &lt;title&gt;Hello world EJB&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;form action="${pageContext.request.contextPath}/sayHello"&gt;
+      &lt;input type="text" name="name" /&gt;&lt;input type="submit" value="Press me!" /&gt;
+    &lt;/form&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>Next, we need to tell Eclipse that the Web application module will 
+import from the EJB module. In the project explorer, go to "Properties 
+-&gt; Java Build Path -&gt; Projects" and add the EJB project as a 
+dependency.</p>
+
+<p>Next create a new servlet <tt>com.bazaar.web.AccountManagerServlet</tt>, and add the URL mapping</p>
+
+<pre><code>&lt;url-pattern&gt;/sayHello&lt;/url-pattern&gt;
+</code></pre>
+
+<p>to <tt>web.xml</tt>. Your <tt>web.xml</tt> will look something like this:</p>
+
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://java.sun.com/xml/ns/javaee"
+  xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+      http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+  id="WebApp_ID" version="3.0"&gt;
+  &lt;display-name&gt;BazaarWAR&lt;/display-name&gt;
+  &lt;welcome-file-list&gt;
+    &lt;welcome-file&gt;index.html&lt;/welcome-file&gt;
+    &lt;welcome-file&gt;index.htm&lt;/welcome-file&gt;
+    &lt;welcome-file&gt;index.jsp&lt;/welcome-file&gt;
+    &lt;welcome-file&gt;default.html&lt;/welcome-file&gt;
+    &lt;welcome-file&gt;default.htm&lt;/welcome-file&gt;
+    &lt;welcome-file&gt;default.jsp&lt;/welcome-file&gt;
+  &lt;/welcome-file-list&gt;
+
+  &lt;servlet&gt;
+    &lt;servlet-name&gt;AccountManagerServlet&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;com.bazaar.web.AccountManagerServlet&lt;/servlet-class&gt;
+  &lt;/servlet&gt;
+
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;AccountManagerServlet&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/sayHello&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;
+&lt;/web-app&gt;
+</code></pre>
+
+<p>then insert the following source code for the servlet:</p>
+
+<pre><code>public class AccountManagerServlet extends HttpServlet {
+   private static final long serialVersionUID = 1L;
+
+   @EJB
+   AccountManagerRemote accountManager;
+
+   protected void doGet(HttpServletRequest request,
+         HttpServletResponse response) throws ServletException, IOException {
+      String name = request.getParameter("name");
+      if (name == null || name.length() == 0) {
+         name = "anonymous";
+      }
+      response.getWriter().write(accountManager.sayHello(name));
+   }
+}
+</code></pre>
+
+<p>To get the right import statements, right click on the source code view then select "Source -&gt; Organize imports."</p>
+
+<p>To deploy, go to the bazaarEAR project, right click, and select "Run 
+As -&gt; Run on Server." If you get some errors initially, try 
+restarting the server and/or deleting and recreating the server 
+definition (as mentioned above).</p>
+
+<p>If you have a successful deployment, you should be able to go to <a href="http://localhost:8080/bazaar">http://localhost:8080/bazaar</a>
+ (check the context root of your Web app to get the correct URI), enter 
+your name in the text box, press the button and see the response of your
+ stateless session bean. Hooray!</p>
+
+<h3>Adding JPA persistence</h3>
+
+<p>So far things have been pretty easy, no? Getting JPA to work in GEP+Geronimo is a little more complicated but not too bad.</p>
+
+<p>First create a JPA entity. It's just a POJO with annotations, so in the EJB <b>client</b> project, create new class <tt>com.bazaar.accounts.User</tt> (information about posters, bidders, etc.). Use the contents below.</p>
+
+<pre><code>@Entity
+@Table(name = "USERS")
+public class User implements Serializable {
+   public static final long serialVersionUID = 1L;
+
+   private static final Logger logger = Logger.getLogger("User");
+
+   @Id
+   @GeneratedValue
+   private Long userId;
+   private String firstName;
+   private String lastName;
+   @Temporal(javax.persistence.TemporalType.DATE)
+   private Date birthDate;
+   private String password;
+   private String username;
+   private String email;
+
+   public User() {
+   }
+
+   public Long getUserId() {
+      return userId;
+   }
+
+   public User(String firstName, String lastName, String username,
+         String password) {
+      this.firstName = firstName;
+      this.lastName = lastName;
+      this.username = username;
+      if (password != null) {
+         setPassword(password);
+      }
+   }
+
+   public String getFirstName() {
+      return firstName;
+   }
+
+   public String getPassword() {
+      return password;
+   }
+
+   public void setFirstName(String firstName) {
+      this.firstName = firstName.toUpperCase();
+   }
+
+   public String getLastName() {
+      return lastName;
+   }
+
+   protected void setLastName(String lastName) {
+      this.lastName = lastName;
+   }
+
+   public Date getBirthDate() {
+      return birthDate;
+   }
+
+   public void setBirthDate(Date birthDate) {
+      this.birthDate = birthDate;
+   }
+
+   public void setPassword(String password) {
+      MessageDigest md;
+      try {
+         md = MessageDigest.getInstance("SHA-256");
+         md.update(password.getBytes("UTF-8"));
+         byte[] digest = md.digest();
+         byte[] encodedPassword = Base64.encodeBase64(digest);
+         this.password = new String(encodedPassword);
+      } catch (NoSuchAlgorithmException e) {
+         logger.log(Level.SEVERE, "Password creation failed", e);
+         throw new RuntimeException(e);
+      } catch (UnsupportedEncodingException e) {
+         logger.log(Level.SEVERE, "Password creation failed", e);
+         throw new RuntimeException(e);
+      }
+   }
+
+   public String getUsername() {
+      return username;
+   }
+
+   public String getEmail() {
+      return email;
+   }
+
+   public void setEmail(String email) {
+      this.email = email;
+   }
+}
+</code></pre>
+
+<p>For the Base64 implementation, you should use the Apache Commons 
+codec library.  If it is not already included in your CLASSPATH, on 
+Ubuntu, you can <tt>sudo apt-get install libcommons-codec-java</tt> then go to project properties -&gt; Java Build Path -&gt; Libraries, add the JAR file <tt>/usr/share/java/commons-codec-1.9.jar</tt>,
+ then go to the Order and Export tab and turn on export for that 
+library.  Dependent projects will automatically pull in the dependency.</p>
+
+<p>By the way, now is a good time to check the dependencies for your 
+projects.  The WAR project should depend on the client JAR project and 
+the client JAR project should not have any project dependencies.  The 
+WAR project's dependency on the client JAR project should be exported in
+ the project Properties -&gt; Order and Export tab.  Any warnings you 
+get about these dependencies in the Markers view can be corrected by 
+right clicking on the warning message and selecting "Quick Fix."</p>
+
+<p>OK, now we have to tell JPA about our entity. Create a file <tt>persistence.xml</tt> under the META-INF directory of the EJB project with
+the following contents:</p>
+
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;persistence xmlns="http://java.sun.com/xml/ns/persistence"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/persistence   
+ http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"&gt;
+
+  &lt;persistence-unit name="BazaarUnit" transaction-type="JTA"&gt;
+    &lt;description&gt;Bazaar Persistence&lt;/description&gt;
+    &lt;provider&gt;org.apache.openjpa.persistence.PersistenceProviderImpl&lt;/provider&gt;
+    &lt;jta-data-source&gt;BazaarDS&lt;/jta-data-source&gt;
+    &lt;non-jta-data-source&gt;NoTxBazaarDS&lt;/non-jta-data-source&gt;
+    &lt;class&gt;com.bazaar.accounts.User&lt;/class&gt;
+  &lt;/persistence-unit&gt;
+&lt;/persistence&gt;
+</code></pre>
+
+<p>This tells JPA how to find our JTA and non-JTA connection pools. We
+also need to tell the EJB container about the dependency on these
+external resources. In META-INF/openejb-jar.xml, add the following
+inside the &lt;dep:environment&gt; tag:</p>
+
+<pre><code>&lt;dep:dependencies&gt;
+  &lt;dep:dependency&gt;
+    &lt;dep:groupId&gt;console.dbpool&lt;/dep:groupId&gt;
+    &lt;dep:artifactId&gt;BazaarDS&lt;/dep:artifactId&gt;
+  &lt;/dep:dependency&gt;
+  &lt;dep:dependency&gt;
+    &lt;dep:groupId&gt;console.dbpool&lt;/dep:groupId&gt;
+    &lt;dep:artifactId&gt;NoTxBazaarDS&lt;/dep:artifactId&gt;
+  &lt;/dep:dependency&gt;
+&lt;/dep:dependencies&gt;
+</code></pre>
+
+<p>Obviously, make sure the data source names match what you configured
+in Geronimo.</p>
+
+<p>Next let's add a couple operations involving persistence to our
+account manager service.  In the @Remote interface, add the specifications:</p>
+
+<pre><code>public void createUser( User user );
+public User findUser( long id );
+</code></pre>
+
+<p>Then, in the implementation bean:</p>
+
+<pre><code>@PersistenceContext
+private EntityManager entityManager;
+
+public void createUser(User user)
+{
+   entityManager.persist(user);
+}
+public User findUser(long id)
+{
+   return entityManager.find(User.class, id);
+}
+</code></pre>
+
+<h3>Testing from a servlet</h3>
+
+<p>Now to test the new operations, go to your Web module project. In
+<tt>index.jsp</tt>, add some new forms:</p>
+
+<pre><code>&lt;form action="${pageContext.request.contextPath}/createUser"
+  method="get"&gt;
+  &lt;table border="0"&gt;
+    &lt;tr&gt;
+      &lt;td align="right"&gt;&lt;font color="black" size="4"&gt;First
+          name&lt;/font&gt;&lt;/td&gt;
+      &lt;td align="left"&gt;&lt;input type="text" name="firstName"&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td align="right"&gt;&lt;font color="black" size="4"&gt;Last
+          name&lt;/font&gt;&lt;/td&gt;
+      &lt;td align="left"&gt;&lt;input type="text" name="lastName"&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td align="right"&gt;&lt;font color="black" size="4"&gt;Username&lt;/font&gt;&lt;/td&gt;
+      &lt;td align="left"&gt;&lt;input type="text" name="username"&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td align="right"&gt;&lt;font color="black" size="4"&gt;Password&lt;/font&gt;&lt;/td&gt;
+      &lt;td align="left"&gt;&lt;input type="password" name="password"&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td align="right"&gt;&lt;input type="submit" value="Create user"&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/table&gt;
+&lt;/form&gt;
+</code></pre>
+
+<p>and</p>
+
+<pre><code>&lt;form action="${pageContext.request.contextPath}/showUser"
+  method="get"&gt;
+  &lt;input type="text" name="id" /&gt; &lt;input type="submit"
+    value="Show user" /&gt;
+&lt;/form&gt;
+</code></pre>
+
+<p>You'll have to add mappings of <tt>/createUser</tt> and <tt>/showUser</tt> to your servlet. In the servlet, modify the hello world code to check the
+request and act accordingly:</p>
+
+<pre><code>  String requestUri = request.getRequestURI();
+  if (requestUri != null &amp;&amp; requestUri.endsWith("/sayHello"))
+  {
+     String name = request.getParameter("name");
+     if (name == null || name.length() == 0)
+     {
+        name = "anonymous";
+     }
+     response.getWriter().write(accountManager.sayHello(name));
+  } else if (requestUri != null &amp;&amp; requestUri.endsWith("/createUser"))
+  {
+     String firstName = request.getParameter("firstName");
+     String lastName = request.getParameter("lastName");
+     String username = request.getParameter("username");
+     String password = request.getParameter("password");
+     User user = new User(firstName, lastName, username, password);
+     accountManager.createUser(user);
+     response.getWriter().write("Created user successfully.");
+  } else if (requestUri != null &amp;&amp; requestUri.endsWith("/showUser"))
+  {
+     User user = null;
+     String id = request.getParameter("id");
+     if (id != null)
+        user = accountManager.findUser(Long.parseLong(id));
+     request.setAttribute("user", user);
+     RequestDispatcher dispatcher = request
+           .getRequestDispatcher("user.jsp");
+     dispatcher.forward(request, response);
+  }
+</code></pre>
+
+<p>This requires a view "user.jsp" for a user. You might use
+something like the following:</p>
+
+<pre><code>&lt;%@ page language="java" contentType="text/html; charset=US-ASCII"
+  pageEncoding="US-ASCII"%&gt;
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd"&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv="Content-Type" content="text/html; charset=US-ASCII"&gt;
+&lt;title&gt;User lookup&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h2&gt;User lookup&lt;/h2&gt;
+
+  &lt;jsp:useBean id="user" scope="request"
+    class="com.bazaar.accounts.User" /&gt;
+
+  &lt;table&gt;
+    &lt;tr&gt;
+      &lt;th align="left"&gt;ID:&lt;/th&gt;
+      &lt;td&gt;&lt;jsp:getProperty name="user" property="userId" /&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th align="left"&gt;First name:&lt;/th&gt;
+      &lt;td&gt;&lt;jsp:getProperty name="user" property="firstName" /&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th align="left"&gt;Last name:&lt;/th&gt;
+      &lt;td&gt;&lt;jsp:getProperty name="user" property="lastName" /&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th align="left"&gt;Username:&lt;/th&gt;
+      &lt;td&gt;&lt;jsp:getProperty name="user" property="username" /&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th align="left"&gt;Password:&lt;/th&gt;
+      &lt;td&gt;&lt;jsp:getProperty name="user" property="password" /&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/table&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>That's it! See if you can create and look up user objects.</p>
+
+<h3>Create a new project for the client</h3>
+
+<p>Now we'll build a simple Java SE client running outside the container to
+test the new stateless session bean:</p>
+
+<ol>
+<li><p>Create a Java project called <tt>BazaarClient</tt>. Note that
+this is a standalone Java project, not an "Application Client Project." 
+ Add the BazaarEJBClient project as a dependency on the build path so we
+ can get the remote interface and entity class definitions.</p></li>
+<li><p>Add the OpenEJB client library to your build path (Project
+properties -&gt; Build Path -&gt; Libraries). Select "Add External
+JARs" then browse to the JAR file <tt><geronimo-dir>/repository/org/apache/openejb/openejb-client/4.0.0-beta-1/openejb-client-4.0.0-beta-1.jar</geronimo-dir></tt>.
+ This will allow your client program to look up the JNDI reference of 
+the account manager session bean and execute the remote methods <tt>createUser</tt> and <tt>findUser</tt>.</p></li>
+<li><p>Add class <tt>Client</tt> to package <tt>com.bazaar.clients</tt>
+and add the client code:</p>
+
+<pre><code>public class Client
+{
+   public static void main(String[] args)
+   {
+      try
+      {
+         Properties properties = new Properties();
+         properties.put(Context.INITIAL_CONTEXT_FACTORY,
+               "org.apache.openejb.client.RemoteInitialContextFactory");
+         properties.put("java.naming.provider.url",
+               "ejbd://localhost:4201");
+         Context context = new InitialContext(properties);
+         AccountManagerRemote accountManager =
+               (AccountManagerRemote) context
+               .lookup("AccountManagerRemote");
+
+         User user = new User("Matt", "Dailey", "mdailey", "xyz");
+         accountManager.createUser(user);
+
+         user = accountManager.findUser(1);
+         System.out.println("User name: " + user.getFirstName() + " "
+               + user.getLastName() + " username: " + user.getUsername());
+      }
+      catch (javax.naming.NamingException ne)
+      {
+         ne.printStackTrace();
+      }
+   }
+}
+</code></pre></li>
+</ol>
+
+
+<p>You should just be able to right click on the Client class in the
+Project Explorer, select Run As -&gt; Java Application, and see your
+code run.</p>
+
+<p>Common problem:</p>
+
+<p>The most common mistakes relate to exporting the reference
+to your session bean via JNDI. Be sure that your remote interface
+is annotated as <tt>@Remote</tt> and that the JNDI mapped name is
+correct. You can browse the JNDI references exported by Geronimo at its
+Web console.</p>
+
+<h3>Browse the database from Eclipse or command line</h3>
+
+<p>To see the effects of your program on the Derby backend database,
+you can use the Eclipse Database Development perspective. To browse
+and edit the database contents, right click on the table of interest
+in the Data Source Explorer and select Edit. You can add data,
+delete rows, create tables, and so on.</p>
+
+<p>If you prefer a command-line SQL interface to the database, you
+can try the <tt>ij</tt> client that ships with Derby.  Add <tt>/usr/lib/jvm/java-6-oracle/db/bin</tt> to your <tt>PATH</tt> then try it:</p>
+
+<pre><code>$ ij
+ij&gt; connect 'jdbc:derby://localhost:1527/BazaarDB' user 'dbadmin' password 'manager';
+ij&gt; show tables;
+...
+DBADMIN             |USERS                         |                    
+...
+ij&amp;gt; select * from users;
+...
+</code></pre>
+
+<h3>Associations</h3>
+
+<p>Now let's work with JPA entities with more interesting
+associations. Add a <code>CreditCard</code> class:</p>
+
+<pre><code>@Entity
+public class CreditCard implements java.io.Serializable
+{
+   static final long serialVersionUID = 1L;
+   @Id
+   @GeneratedValue
+   private Long creditCardId;
+   private String nameOnCard;
+   private String accountNumber;
+   @ManyToOne
+   private User user;
+   ...
+}
+</code></pre>
+
+<p>Add appropriate getters and setters, then add the corresponding collection to your <code>User</code> class:</p>
+
+<pre><code> @OneToMany(cascade={CascadeType.ALL})
+ private Set&lt;CreditCard&gt; creditCards = new HashSet&lt;CreditCard&gt;();
+
+ public void addCreditCard( CreditCard creditCard )
+ {
+    creditCards.add( creditCard );
+ }
+ public Set&lt;CreditCard&gt; getCreditCards()
+ {
+    return this.creditCards;
+ }
+</code></pre>
+
+<p>This is a <em>one-to-many bidirectional</em> relationship since
+the <code>CreditCard</code> class knows about the <code>User</code>
+class.  Don't forget to tell OpenJPA to map the new <code>CreditCard</code> class.  In <code>persistence.xml</code> add the entry</p>
+
+<pre><code>&lt;class&gt;com.bazaar.accounts.CreditCard&lt;/class&gt;
+</code></pre>
+
+<p>Then you can add a couple
+new methods to your stateless session bean:</p>
+
+<pre><code>...
+public Set&lt;CreditCard&gt; creditCardsForUser(long id);
+public void addCreditCardtoUser(long id, CreditCard creditCard);
+...
+</code></pre>
+
+<p>Put appropriate implementations in the Bean class.</p>
+
+<p>Now, in your client, try to persist a detached <code>User</code>
+instance, add a <code>CreditCard</code> instance or two to it, and check the results.</p>
+
+<p>That should be it! Let me know if you have any trouble. If you
+want to contribute nice screen shots, please do!</p>
+
+<hr>
+
+<address><a href="mailto:mdailey@ait.ac.th">mdailey@ait.ac.th</a></address>
+
+
+
+  </div>
+</div>
+
+<div id="ftr">
+  <div id="ftrimage">
+    <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">
+      <img alt="Creative Commons License" src="ejb-tutorial_files/80x15.png">
+    </a>
+    <a href="http://validator.w3.org/check?uri=referer">
+      <img src="ejb-tutorial_files/valid_xhtml-ec7ae22f460364cbdf81702d07a52238.png" alt="Valid XHTML 1.0 Transitional" height="15" width="80">
+    </a>
+    <a href="http://jigsaw.w3.org/css-validator/check/referer">
+      <img src="ejb-tutorial_files/valid_css-59ffe27db11b107af6f11ccb7682948c.png" alt="Valid XHTML 1.0 Transitional" height="15" width="80">
+    </a>
+  </div>
+  <div id="copyright">
+    <p>License: <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution</a>,
+    Asian Institute of Technology, 2004-2015</p>
+  </div>
+</div>
+
+  <script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+  </script><script src="ejb-tutorial_files/ga.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var pageTracker = _gat._getTracker("UA-5968281-1");
+    pageTracker._trackPageview();
+  </script>
+  
+
+
+
+
+
+</body></html>

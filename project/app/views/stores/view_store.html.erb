@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="page-header">
+    <% if @shopping_mall_id != nil %>
+            <h1><%= ShoppingMall.find(@shopping_mall_id).shopping_mall_name %></h1>
+    <% else %>
+        <h1>Stores</h1>
+    <% end %>
+  </div>
+  <br>
+
+  <div class="row">
+      <% @stores.each do |store| %>
+            <div class="media">
+              <div class="media-left">
+                <%= image_tag store.image.url(:show, timestamp: false) %>
+              </div>
+              <div class="media-body">
+                <h4 class="media-heading"><%= store.store_name %></h4>
+                <p>Description: <%= store.description %></p>
+                <p>Location: <%= store.location %></p>
+                <p>Phone: <%= store.store_contact_phone %></p>
+                <% if @shopping_mall_id == nil %>
+                    <% if store.ShoppingMall_id == nil %>
+                    <p>Shopping mall: - </p>
+                      <% else %>
+                        <p>Shopping mall: <%= link_to ShoppingMall.find(store.ShoppingMall_id).shopping_mall_name, shopping_mall_path(store.ShoppingMall_id) %></p>
+                       <% end %>
+                <% end %>
+                <p><%= link_to 'View all promotions of ' + store.store_name , promotion_of_store_show_path(:store_id => store.id) %></p>
+              </div>
+            </div>
+        <hr>
+      <% end %>
+  </div>
+  <center><%= will_paginate @stores %></center>
+</div>

@@ -1,0 +1,22 @@
+
+
+body > .container {
+    padding-top: 60px;
+
+}
+
+#footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: lightgoldenrodyellow;
+}
+
+.well {
+    background-color: #ECECF7;
+
+}
+
+hr {
+    border-color: #D4D4E9;
+}

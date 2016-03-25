@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MallEasy</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+  <!-- Bootstrap -->
+
+</head>
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse">
+      </button>
+      <%= link_to image_tag('More.png', size: "30x30"), root_path, :class => "navbar-brand" %>
+      <%= link_to "MallEasy", root_path, :class => "navbar-brand" %>
+    </div>
+
+
+
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-left">
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Shopping mall<span class="caret"></span></a>
+          <% if Country.all.count > 0 %>
+              <ul class="dropdown-menu">
+                <% Country.all.each do |country| %>
+
+                    <li><%= link_to country.country_name, search_shopping_mall_path(:country_id => country.id) %></li>
+                    <% if City.where(:Country_id => country.id).count > 0 %>
+                        <% City.where(:Country_id => country.id).each do |city| %>
+                            <li style="font-size: 12px;"><%= link_to city.city_name, search_shopping_mall_path(:city_id => city.id) %></li>
+                        <% end %>
+                    <% end %>
+                    <li class="divider"></li>
+
+                <% end %>
+              </ul>
+          <% end %>
+        </li>
+        <% if user_signed_in? %>
+
+            <% if current_user.Role_id == 1 %>
+              <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Manage<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><%= link_to "City", cities_path %></li>
+                  <li><%= link_to "Country", countries_path %></li>
+                  <li><%= link_to "Reviews", reviews_path %></li>
+                  <li><%= link_to "Role", roles_path %></li>
+                  <li><%= link_to "Shopping mall", shopping_malls_path %></li>
+                  <li><%= link_to "Store category", store_categories_path %></li>
+                  <li><%= link_to "User", manage_user_path %></li>
+                </ul>
+              </li>
+
+                <% elsif current_user.Role_id == 2 %>
+                    <% if ShoppingMall.find_by_User_id(current_user.id) == nil  %>
+                        <li><%= link_to 'Create my Shopping mall', new_shopping_mall_path %></li>
+                    <% else %>
+                        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Manage<span class="caret"></span></a>
+                          <ul class="dropdown-menu">
+                            <li><%= link_to 'My Shopping mall' , shopping_mall_path(ShoppingMall.find_by_User_id(current_user.id).id) %></li>
+                            <li><%= link_to 'My Stores', stores_path(:shopping_mall_id => ShoppingMall.find_by_User_id(current_user.id).id) %></li>
+                            <li><%= link_to 'My Promotions', promotion_of_shopping_mall_path(:shopping_mall_id => ShoppingMall.find_by_User_id(current_user.id).id) %></li>
+                            <li><%= link_to 'My Reviews', review_of_shopping_mall_path(:shopping_mall_id => ShoppingMall.find_by_User_id(current_user.id).id)  %></li>
+                          </ul>
+                        </li>
+
+                    <% end %>
+            <% elsif current_user.Role_id == 5 %>
+                <li class="disabled"><%= link_to 'Create my Shopping mall', new_shopping_mall_path, :title => "Can't create shopping mall now."%></li>
+            <% end %>
+
+            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Account<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><%= link_to "Edit profile", edit_user_registration_path %></li>
+                <li><%= link_to "Sign out", destroy_user_session_path, :method => :delete %></li>
+              </ul>
+            </li>
+
+        <% else %>
+
+            <li><%= link_to "Sign up", new_user_registration_path %></li>
+            <li><%= link_to "Sign in", new_user_session_path %></li>
+
+        <% end %>
+
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <% if user_signed_in? %>
+            <li style="color: white;">Welcome! <%= current_user.first_name %> <%= current_user.last_name %></li>
+        <% end %>
+      </ul>
+  <%= form_tag(view_store_path, :method => "get", class: "navbar-form", id: "search-form") do %>
+          <div class="row">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-3">
+              <div class="input-group">
+                <%= text_field_tag :search, params[:search], class: "form-control", placeholder: "Search Stores" %>
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">Search</button>
+                </span>
+              </div>
+            </div>
+          </div>
+      <% end %>
+
+
+  <!--    <%= form_tag stores_path, method: "get", class: "navbar-form", id: "search-form" do %>
+          <div class="row">
+            <div class="col-lg-3">
+              <div class="input-group">
+                <%= text_field_tag :store, params[:store], class: "span2", placeholder: "Search Stores" %>
+                <span class="input-group-btn">
+                <button class="btn btn-default" type="submit">GO!</button></span>
+              </div>
+            </div>
+          </div>
+      <% end %>-->
+
+
+
+
+
+    </div>
+
+  </div>
+</nav>
+
+<%= yield %>
+
+
+<!--<p class="notice" ><%= notice %></p>
+<p class="alert" ><%= alert %></p>
+<% if flash[:error] %>
+    <div id="error">
+      <%= flash[:error] %>
+    </div>
+<% end %>-->
+
+
+</body>
+</html>
+
+
+

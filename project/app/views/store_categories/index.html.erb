@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="page-header">
+    <h1>Store categories</h1>
+  </div>
+  <br>
+
+
+  <div class="row">
+    <table class="table table-hover table-striped">
+      <thead>
+    <tr>
+      <th>Category name</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @store_categories.each do |store_category| %>
+      <tr>
+        <td style="width: 70%"><%= store_category.category_name %></td>
+        <td><%= link_to 'Edit', edit_store_category_path(store_category) %></td>
+        <td><%= link_to 'Destroy', store_category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+    <div class="col-lg-12 text-right"><%= link_to 'New Store category', new_store_category_path, :class => "btn btn-default" %></div>
+
+  </div>
+</div>

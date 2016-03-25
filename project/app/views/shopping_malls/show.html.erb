@@ -1,0 +1,183 @@
+<script type="application/javascript">
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    })
+
+    $(document).on("click", ".open-StoreDetail", function () {
+        var storeId = $(this).data('id');
+        $(".store").text(storeId);
+    });
+</script>
+
+<div class="container">
+  <div class="page-header">
+    <h1><%=@shopping_mall.shopping_mall_name%></h1>
+  </div>
+<br>
+<p id="notice"><%= notice %></p>
+  <div class="well">
+  <div class="row">
+    <div class="col-lg-2">
+      <span style="font-size: 14px;">Phone no:</span>
+    </div>
+    <div class="col-lg-3">
+      <span style="font-size: 14px;"><%= @shopping_mall.phone_number %></span>
+    </div>
+    <div class="col-lg-2">
+      <span style="font-size: 14px;">Address:</span>
+    </div>
+    <div class="col-lg-3">
+      <span style="font-size: 14px;"><%= @shopping_mall.address %>  <%= City.find(@shopping_mall.City_id).city_name %> <%= Country.find(@shopping_mall.Country_id).country_name %></span>
+    </div>
+  </div>
+    <div class="row">
+      <div class="col-lg-2">
+        <span style="font-size: 14px;">City:</span>
+      </div>
+      <div class="col-lg-3">
+        <span style="font-size: 14px;"><%= City.find(@shopping_mall.City_id).city_name %></span>
+      </div>
+      <div class="col-lg-2">
+        <span style="font-size: 14px;">Country:</span>
+      </div>
+      <div class="col-lg-3">
+        <span style="font-size: 14px;"><%= Country.find(@shopping_mall.Country_id).country_name %></span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-2">
+        <span style="font-size: 14px;">Number of stores:</span>
+      </div>
+      <div class="col-lg-3">
+        <span style="font-size: 14px;"><%= Store.where(:ShoppingMall_id =>  @shopping_mall.id).count %></span>
+      </div>
+      <div class="col-lg-2">
+
+      </div>
+      <div class="col-lg-3">
+
+      </div>
+      <div class="col-lg-2">
+        <span style="font-size: 14px;"><%= link_to 'View location map', @shopping_mall.link, :class => "btn btn-default btn-sm" %></span>
+      </div>
+
+    </div>
+</div>
+
+<br>
+
+
+
+  <div class="row ">
+    <% @promotions.each do |promotion| %>
+
+        <div class="col-sm-6 col-md-4">
+          <div class="thumbnail">
+            <%= image_tag promotion.image.url(:list, timestamp: false) %>
+            <div class="caption">
+              <h3><%= promotion.title %></h3>
+              <p>Store name: <%= Store.find(promotion.Store_id).store_name %></p>
+              <p>Location: <%= Store.find(promotion.Store_id).location %></p>
+              <p>Phone: <%= Store.find(promotion.Store_id).store_contact_phone %></p>
+              <p>
+                <%= link_to 'Detail', promotion_path(promotion.id), :class => "btn btn-info btn-sm" %>
+                <button tabindex="0" type="button" class="btn btn-primary btn-sm" data-placement="bottom" data-trigger="focus" data-toggle="popover" title="Discount code" data-content="<%= promotion.discount_code %>">Get discount code</button>
+              </p>
+            </div>
+          </div>
+        </div>
+    <% end %>
+  </div>
+
+
+
+  <!-- <div class="row">
+  <% @stores.each do |store| %>
+
+    <div class="col-sm-6 col-md-4">
+      <div class="thumbnail">
+        <%= image_tag store.image.url(:list, timestamp: false) %>
+        <div class="caption">
+          <h3><%= store.store_name %></h3>
+          <h4>Location: <%=store.location %></h4>
+          <p>Phone: <%= store.store_contact_phone %></p>
+          <p>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#store" >
+              Detail
+            </button>
+
+            <a data-toggle="modal" data-id="<%=store.id%>" title="Detail" class="open-StoreDetail btn btn-primary" href="#store">Detail</a>
+            <button tabindex="0" type="button" class="btn btn-primary" data-placement="bottom" data-trigger="focus" data-toggle="popover" title="Discount code" data-content="This function will implement later">Get discount code</button>
+          </p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+    </div>-->
+
+  <div class="page-header">
+    <h3>Reviews</h3>
+  </div>
+
+  <div id="review" class="well well-small">
+  <% if Review.where(:ShoppingMall_id => @shopping_mall.id).count == 0 %>
+      <p style="font-style: italic">No comment yet.</p>
+  <%else%>
+      <%= render :partial => Review.where(:ShoppingMall_id => @shopping_mall.id).order("created_at desc").limit(5) %>
+      <%= link_to 'View all comments', review_of_shopping_mall_path(:shopping_mall_id => @shopping_mall.id) %>
+    <% end %>
+
+  </div>
+
+
+  <% if user_signed_in? %>
+  <%= form_for [@shopping_mall, Review.new] do |f| %>
+
+      <%= hidden_field_tag 'shopping_mall_id', @shopping_mall.id %>
+      <%= hidden_field_tag 'user_id', current_user.id %>
+    <div class="form-horizontal">
+      <div class="form-group">
+        <div class="col-lg-6"><%= f.text_area :comment, :class => "form-control", :placeholder => "Write a comment.." %></div>
+        <div class="col-lg-6"></div>
+      </div>
+      <div class="form-group">
+        <div class="col-lg-6 text-left">
+          <%= f.submit "Comment", :class => "btn btn-sm btn-primary" %> &nbsp;&nbsp;
+        </div>
+    </div>
+      <% end %>
+  <% else %>
+        <div class="form-group">
+          <div class="col-lg-12"><p style="font-style: italic"><%= link_to 'Sign in', new_user_session_path %> before leaving some comment</p></div>
+        </div>
+
+  <% end %>
+
+
+
+  <br>
+  <% if user_signed_in? %>
+      <% if current_user.Role_id ==2 %>
+          <div class="form-group">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-9 text-right">
+              <%= link_to 'Edit your shopping mall', edit_shopping_mall_path(@shopping_mall), :class => "btn btn-default" %>
+            </div>
+          </div>
+      <% end %>
+  <% end %>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
